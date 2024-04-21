@@ -28,11 +28,11 @@ To evaluate the performance of our feature tracking service, I simulated the sum
 
 With the feature usage limit set to 1 million, the system successfully handled 900,000 requests with a 0% error rate within 13 minutes.
 
-![Throughput Test Results](test1.png)
+![Throughput Test Results](static/test1.png)
 
 We have also exposed an endpoint at `/feature/usage` to check the usage of the feature.
 
-![Throughput Test Results](test4.png)
+![Throughput Test Results](static/test4.png)
 
 As we can see above the feature usage is accurately tracked.
 
@@ -40,13 +40,13 @@ As we can see above the feature usage is accurately tracked.
 
 For the next test, we set the feature usage limit for the "Summarize" feature to 10 and ran 20 threads. This setup led to 50% error rates after the first 10 successful requests as expected due to the limit enforcement. The results are depicted in the following graph:
 
-![Subscription Limit Test Results](test2.png)
+![Subscription Limit Test Results](static/test2.png)
 
 ## Subscription Expiry Enforcement
 
 We further tested the system by setting the subscription expiry to a short duration like 2 minutes from user account creation. This test helped verify that our service correctly enforces subscription expiration.
 
-![Subscription Expiry Enforcement Results](test3.png)
+![Subscription Expiry Enforcement Results](static/test3.png)
 
 
 # Persistence
