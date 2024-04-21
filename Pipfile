@@ -7,6 +7,9 @@ name = "pypi"
 fastapi = "*"
 uvicorn = "*"
 pydantic = "*"
+bcrypt = "*"
+python-dotenv = "*"
+itsdangerous = "*"
 
 [dev-packages]
 
