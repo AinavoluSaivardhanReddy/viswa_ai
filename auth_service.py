@@ -3,7 +3,6 @@ from itsdangerous import URLSafeTimedSerializer as Serializer
 from pydantic import BaseModel
 import sqlite3
 import os
-from database import add_user
 from dotenv import load_dotenv
 import bcrypt
 from datetime import datetime, timedelta
@@ -29,6 +28,7 @@ def add_user(username: str, password: str):
     # setting current time as the start of subscription
     current_limits_start = datetime.now().isoformat()
 
+    # setting the default subscription tier to free and renewal of feature limits for a week i.e. feature limits will keep renewing every week until expiry
     c.execute('INSERT INTO users (username, password, subscription, subscription_expiry, current_limits_start, limits_renewal) VALUES (?, ?, ?, ?, ?, ?)',
               (username, password, "free", formatted_expiry, current_limits_start, 7 * 24 * 60 * 60))
     conn.commit()

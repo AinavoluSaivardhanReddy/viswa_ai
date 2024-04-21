@@ -10,6 +10,7 @@ pydantic = "*"
 bcrypt = "*"
 python-dotenv = "*"
 itsdangerous = "*"
+redis = "*"
 
 [dev-packages]
 

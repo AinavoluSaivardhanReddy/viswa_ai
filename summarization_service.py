@@ -2,6 +2,7 @@ from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel
 from transformers import pipeline
 from validation_service import validate_user
+from feature_tracking_service import track_feature_usage
 
 summarizer = pipeline("summarization", model="facebook/bart-large-cnn")
 
@@ -15,8 +16,12 @@ def summarize(text:str):
     return response[0]['summary_text']
 
 @router.post("/")
-# We are usng dependency injection(Depends) here to validate the use session and subscription validation
+@track_feature_usage("Summarize")
 async def encode_query(request: QueryModel, user = Depends(validate_user)):
+    '''
+    We are using dependency injection(Depends) here to validate the user session and subscription validation
+    By using @track_feature_usage decorator we can track the feature usage for this function
+    '''
     try:
         response = summarize(request.txt)
         return response
