@@ -1,6 +1,7 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel
 from transformers import pipeline
+from validation_service import validate_user
 
 summarizer = pipeline("summarization", model="facebook/bart-large-cnn")
 
@@ -14,7 +15,8 @@ def summarize(text:str):
     return response[0]['summary_text']
 
 @router.post("/")
-async def encode_query(request: QueryModel):
+# We are usng dependency injection(Depends) here to validate the use session and subscription validation
+async def encode_query(request: QueryModel, user = Depends(validate_user)):
     try:
         response = summarize(request.txt)
         return response

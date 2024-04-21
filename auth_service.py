@@ -6,6 +6,7 @@ import os
 from database import add_user
 from dotenv import load_dotenv
 import bcrypt
+from datetime import datetime, timedelta
 
 router = APIRouter()
 
@@ -16,6 +17,22 @@ serializer = Serializer(SECRET_KEY, salt="session")
 class User(BaseModel):
     username: str
     password: str
+
+def add_user(username: str, password: str):
+    conn = sqlite3.connect('users.db')
+    c = conn.cursor()
+
+    # setting subscription expiry as the time 10 minutes from the time of creation for testing
+    subscription_expiry = datetime.now() + timedelta(minutes=10)
+    formatted_expiry = subscription_expiry.isoformat()
+
+    # setting current time as the start of subscription
+    current_limits_start = datetime.now().isoformat()
+
+    c.execute('INSERT INTO users (username, password, subscription, subscription_expiry, current_limits_start, limits_renewal) VALUES (?, ?, ?, ?, ?, ?)',
+              (username, password, "free", formatted_expiry, current_limits_start, 7 * 24 * 60 * 60))
+    conn.commit()
+    conn.close()
 
 @router.post("/signup")
 def sign_up(user: User):
